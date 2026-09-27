@@ -13,6 +13,7 @@ import { referenceUrl } from "@/data/science";
 import { stacks } from "@/data/stacks";
 import { evidence } from "@/data/taxonomy";
 import type { Product } from "@/data/types";
+import { siteUrl } from "@/lib/site";
 
 type Params = Promise<{ slug: string }>;
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 function jsonLd(p: Product) {
-  const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const site = siteUrl();
   return {
     "@context": "https://schema.org",
     "@type": "Product",

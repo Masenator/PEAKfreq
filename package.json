@@ -13,7 +13,7 @@
     "check:catalog": "node --experimental-strip-types scripts/check-catalog.ts"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   },
   "dependencies": {
     "next": "^15.5.26",

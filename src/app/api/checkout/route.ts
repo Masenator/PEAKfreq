@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import Stripe from "stripe";
 import { brand } from "@/data/brand";
 import { isCurrency, priceCart, type CartLine } from "@/lib/pricing";
+import { siteUrl } from "@/lib/site";
 
 /**
  * Creates a Stripe Checkout session. Prices are always recalculated on the
@@ -33,7 +34,7 @@ export async function POST(req: NextRequest) {
   const cart = priceCart(lines, currency);
   if (cart.lines.length === 0) return NextResponse.json({ error: "Your bag is empty" }, { status: 400 });
 
-  const origin = process.env.NEXT_PUBLIC_SITE_URL ?? req.nextUrl.origin;
+  const origin = process.env.NEXT_PUBLIC_SITE_URL ? siteUrl() : req.nextUrl.origin;
   const key = process.env.STRIPE_SECRET_KEY;
   if (!key) {
     return NextResponse.json({ url: `${origin}/checkout/success?demo=1`, demo: true });

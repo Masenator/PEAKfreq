@@ -6,6 +6,7 @@ import { Header } from "@/components/Header";
 import { StoreProvider } from "@/components/StoreProvider";
 import { brand } from "@/data/brand";
 import { formatMoney } from "@/lib/pricing";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 const archivo = Archivo({
@@ -17,10 +18,10 @@ const archivo = Archivo({
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: "swap" });
 const mono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono-jb", weight: ["400", "500", "700"], display: "swap" });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const site = siteUrl();
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(site),
   title: {
     default: `${brand.name} · ${brand.tagline}`,
     template: `%s · ${brand.name}`,
