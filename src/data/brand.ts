@@ -11,8 +11,10 @@ export const brand = {
   mission:
     "Your body runs on rhythm. We make evidence-graded supplements and technical apparel that help it hold the right one.",
   legalEntity: "PEAKfreq Ltd",
-  email: "hello@peakfreq.com",
-  supportEmail: "support@peakfreq.com",
+  /** Canonical production domain (no trailing slash). */
+  url: "https://www.peakfreq.co.uk",
+  email: "hello@peakfreq.co.uk",
+  supportEmail: "support@peakfreq.co.uk",
   social: {
     instagram: "https://instagram.com/peakfreq",
     strava: "https://www.strava.com/clubs/peakfreq",

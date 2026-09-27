@@ -1,9 +1,12 @@
+import { brand } from "../data/brand.ts";
+
 /**
- * Canonical site origin, e.g. "https://peakfreq.com" (no trailing slash).
+ * Canonical site origin, e.g. "https://www.peakfreq.co.uk" (no trailing slash).
  *
- * Tolerates common env-var mistakes ("peakfreq.com", "https://peakfreq.com/",
- * stray whitespace) instead of crashing the build. Falls back to Vercel's
- * system URLs, then localhost.
+ * Order: NEXT_PUBLIC_SITE_URL if set, then the brand domain in production,
+ * then the Vercel preview URL, then localhost. Tolerates common env-var
+ * mistakes ("peakfreq.co.uk", trailing slashes, whitespace) instead of
+ * crashing the build.
  */
 function normalise(raw: string | undefined): string | null {
   const value = raw?.trim();
@@ -17,10 +20,11 @@ function normalise(raw: string | undefined): string | null {
 }
 
 export function siteUrl(): string {
-  return (
-    normalise(process.env.NEXT_PUBLIC_SITE_URL) ??
-    normalise(process.env.VERCEL_PROJECT_PRODUCTION_URL) ??
-    normalise(process.env.VERCEL_URL) ??
-    "http://localhost:3000"
-  );
+  const fromEnv = normalise(process.env.NEXT_PUBLIC_SITE_URL);
+  if (fromEnv) return fromEnv;
+  const isProduction = process.env.VERCEL_ENV
+    ? process.env.VERCEL_ENV === "production"
+    : process.env.NODE_ENV === "production";
+  if (isProduction) return brand.url;
+  return normalise(process.env.VERCEL_URL) ?? "http://localhost:3000";
 }

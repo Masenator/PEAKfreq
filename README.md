@@ -138,5 +138,12 @@ The ops console carries per-product compliance notes, including where claims do 
 
 ## Deploying
 
+Live domain: **https://www.peakfreq.co.uk** (set in `brand.url`, used for canonical links, the
+sitemap and Stripe redirects in production).
+
 Any Node host works. On Vercel, import the repo, add the environment variables from `.env.example`,
 and deploy. No database is required: the catalog is code and orders live in Stripe.
+
+To connect the domain on Vercel, add both `www.peakfreq.co.uk` and `peakfreq.co.uk` under
+Project → Settings → Domains, set `www` as primary so the bare domain redirects to it, then add the
+DNS records Vercel shows at your domain registrar.
