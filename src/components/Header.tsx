@@ -58,7 +58,7 @@ export function Header() {
             <Menu />
           </button>
           <Link href="/" aria-label={`${brand.name} home`} className="logo">
-            <Logo />
+            <Logo id="pf-logo-header" />
           </Link>
           <div className="header__actions">
             <CurrencySelect />
@@ -72,7 +72,7 @@ export function Header() {
 
       <div className="mobile-nav" data-open={open} aria-hidden={!open}>
         <div className="row between">
-          <Logo />
+          <Logo id="pf-logo-menu" />
           <button className="icon-btn" aria-label="Close menu" onClick={() => setOpen(false)} style={{ color: "var(--bone)" }}>
             <Close />
           </button>

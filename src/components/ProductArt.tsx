@@ -1,5 +1,6 @@
 import { brand } from "@/data/brand";
 import type { Product } from "@/data/types";
+import { MARK_W, MarkGradient, MarkPaths } from "./LogoMark";
 
 /**
  * Generated label art. Renders packaging or a garment silhouette from catalog
@@ -23,18 +24,13 @@ function Wordmark({ x, y, size, fill, anchor = "middle" }: { x: number; y: numbe
   );
 }
 
-function PeakMark({ x, y, w, color }: { x: number; y: number; w: number; color: string }) {
-  const s = w / 64;
+/** Brand mark placed on packaging or garments. `color` = single colour (deboss); omit for the gradient (embroidery). */
+function PeakMark({ x, y, w, color, gradientId }: { x: number; y: number; w: number; color?: string; gradientId?: string }) {
+  const s = w / MARK_W;
   return (
-    <path
-      transform={`translate(${x} ${y}) scale(${s})`}
-      d="M0 20 H14 L20 12 L26 26 L34 0 L42 30 L48 16 L52 20 H64"
-      fill="none"
-      stroke={color}
-      strokeWidth={3.2 / Math.max(s, 0.4)}
-      strokeLinejoin="round"
-      strokeLinecap="round"
-    />
+    <g transform={`translate(${x} ${y}) scale(${s})`}>
+      <MarkPaths stroke={color ?? `url(#${gradientId})`} strokeWidth={Math.min(8, 2.4 / s)} />
+    </g>
   );
 }
 
@@ -93,6 +89,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
     <svg viewBox="0 0 400 500" className={className} role="img" aria-label={title ? label : undefined} aria-hidden={title ? undefined : true}>
       <defs>
         <Sheen id={sheen} />
+        <MarkGradient id={`mark-${p.id}`} />
       </defs>
       {children}
     </svg>
@@ -211,7 +208,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
               <rect x={214} y={150} width={50} height={6} rx={3} fill={accent} />
             </>
           )}
-          <PeakMark x={p.art.format === "jacket" ? 146 : 176} y={150} w={40} color={accent} />
+          <PeakMark x={p.art.format === "jacket" ? 146 : 176} y={146} w={44} gradientId={`mark-${p.id}`} />
           <text
             x={200}
             y={410}
@@ -234,7 +231,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <rect x={120} y={52} width={160} height={26} fill="#000" opacity={0.25} />
           <path d="M112 260 L128 440" stroke={accent} strokeWidth={4} />
           <path d="M288 260 L272 440" stroke={accent} strokeWidth={4} opacity={0.4} />
-          <PeakMark x={138} y={100} w={34} color={accent} />
+          <PeakMark x={136} y={96} w={38} gradientId={`mark-${p.id}`} />
           <text x={200} y={70} textAnchor="middle" fill={ink} style={{ ...MONO, fontSize: 10 }} opacity={0.6}>
             {brand.name.toUpperCase()}
           </text>

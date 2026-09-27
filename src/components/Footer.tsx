@@ -18,7 +18,7 @@ export function Footer() {
         <hr className="hr" />
         <div className="footer__cols" style={{ paddingTop: 48 }}>
           <div className="stack-v" style={{ "--gap": "18px" } as React.CSSProperties}>
-            <Logo />
+            <Logo id="pf-logo-footer" />
             <p className="muted" style={{ maxWidth: 34 + "ch", margin: 0, fontSize: 14.5 }}>
               {brand.mission}
             </p>

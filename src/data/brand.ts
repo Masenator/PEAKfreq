@@ -40,6 +40,8 @@ export const brand = {
     glacier: "#A9CBDD",
     moss: "#3E5641",
   },
+  /** Logo mark gradient, left to right (from the embroidered logo). */
+  logoGradient: ["#5E9E6A", "#6E9A62", "#A08C4A", "#DB7A45"],
 } as const;
 
 export type Brand = typeof brand;
