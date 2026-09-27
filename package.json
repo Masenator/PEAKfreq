@@ -1,0 +1,30 @@
+{
+  "name": "peakfreq",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "PEAKfreq — performance supplements and technical apparel. White-label ready storefront.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "export:shopify": "node --experimental-strip-types scripts/export-shopify.ts",
+    "check:catalog": "node --experimental-strip-types scripts/check-catalog.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "next": "^15.5.26",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "stripe": "^22.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^5.9.3"
+  }
+}

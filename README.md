@@ -1,0 +1,142 @@
+# PEAKfreq
+
+**Find your frequency.** Evidence-graded performance supplements and technical apparel.
+
+A production-ready Next.js storefront built so that every product the brand mentions can be
+white-labelled and sold: one catalog record drives the product page, label art, cart, checkout,
+protocol bundles, journal mentions, and a Shopify export.
+
+---
+
+## Quick start
+
+```bash
+npm install
+cp .env.example .env.local   # optional: add Stripe + ops password
+npm run dev                  # http://localhost:3000
+```
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Local dev server |
+| `npm run build && npm start` | Production build and server |
+| `npm run typecheck` | TypeScript check |
+| `npm run check:catalog` | Validates products, SKUs, prices, protocols and journal mentions |
+| `npm run export:shopify` | Writes `exports/shopify-products.csv` for a one-shot Shopify import |
+
+Requires Node 22.6+ for the two catalog scripts (they run TypeScript directly).
+
+---
+
+## White-labelling a product
+
+Everything lives in **`src/data/products.ts`**. To add or re-label a product:
+
+1. Copy an existing record. Give it a unique `id` and `slug`.
+2. Set `name`, `line`, `descriptor`, prices in GBP/USD/EUR (minor units via the `m()` helper),
+   `variants` with your SKUs, and `art` colours. The generated label artwork updates automatically.
+3. Fill in `whiteLabel`: supplier, sourcing spec, MOQ, landed unit cost, lead time, compliance notes.
+   This is private and shown only in the ops console.
+4. Only put **authorised** UK/EU health claims in `claims`, verbatim. Everything else is research copy.
+5. Run `npm run check:catalog`.
+
+The product is then:
+
+- live at `/products/<slug>` with structured data for Google Shopping;
+- in the shop grid and filters, by category and goal;
+- sellable at checkout (Stripe uses inline `price_data`, so nothing to set up in Stripe first);
+- mentionable anywhere in the journal as `[[id]]` or `[[id|custom label]]`, which renders a
+  shoppable link with a hover card and one-click add;
+- addable to a protocol bundle in `src/data/stacks.ts`;
+- included in the Shopify CSV and catalog JSON exports.
+
+To use real photography, drop an image in `/public` and set `image: "/your-photo.jpg"` on the
+product. It replaces the generated label art everywhere.
+
+### Rebranding the whole store
+
+`src/data/brand.ts` holds the name, wordmark, mission, contact details, currencies, free-shipping
+thresholds, subscription discount and shipping countries. Colours are CSS variables at the top of
+`src/app/globals.css`.
+
+---
+
+## Commerce
+
+- **Checkout:** `POST /api/checkout` re-prices the bag on the server from the catalog and opens a
+  Stripe Checkout session. Subscribe-and-save items become monthly recurring prices. With no
+  `STRIPE_SECRET_KEY`, checkout runs in demo mode and goes straight to the success page.
+- **Currencies:** GBP, USD, EUR, auto-detected from the browser language and switchable in the header.
+- **Discounts:** subscribe and save (15%) or protocol bundle (10%). The best one applies; they don't stack.
+- **Newsletter:** `POST /api/subscribe`. Set `NEWSLETTER_WEBHOOK_URL` to forward sign-ups to Klaviyo,
+  Mailchimp, Make or Zapier.
+- **Tax:** set `STRIPE_AUTOMATIC_TAX=true` once Stripe Tax is configured.
+
+## Ops console
+
+`/ops` shows every product with SKUs, net price ex-VAT, unit cost, gross margin, subscription margin,
+MOQ, MOQ cash outlay, lead time, supplier, sourcing spec and compliance notes. It also has the
+Shopify CSV and catalog JSON downloads and a launch checklist.
+
+It is protected with HTTP Basic auth. Set `OPS_PASSWORD` in production; if unset, `/ops` works in
+development only and returns 404 in production.
+
+---
+
+## Site map
+
+| Route | Purpose |
+| --- | --- |
+| `/` | Hero, five frequencies, essentials, protocols, evidence grades, apparel, journal, commitments |
+| `/shop` | Full range with category and goal filters |
+| `/products/[slug]` | Product page: variants, subscribe and save, ingredients, specs, science, claims |
+| `/protocols`, `/protocols/[slug]` | Bundled systems with timing for each item |
+| `/science` | Evidence library with references, plus the "not selling yet" watchlist |
+| `/journal`, `/journal/[slug]` | Editorial with shoppable product mentions |
+| `/about` | Brand story and principles |
+| `/cart`, `/checkout/success` | Bag and confirmation |
+| `/legal` | Shipping, returns, subscriptions, supplement info, terms and privacy (template) |
+| `/ops` | Private catalog, margin and sourcing console |
+
+---
+
+## Brand system
+
+**Idea.** Physiology is rhythmic. Heartbeat, stride cadence, the sleep–wake clock, neural focus and
+tissue repair all run in cycles. "Peak frequency" means keeping those rhythms on time. That gives
+the brand a concrete, defensible meaning and keeps it clear of "frequency healing" pseudoscience.
+
+**The five frequencies** organise the range: Cadence (fuel), Cellular (recover), Circadian (sleep),
+Neural (focus), Cardiac (daily).
+
+**Voice.** Short declaratives, technical and honest: ON's precision, Patagonia's candour, Gymshark's
+energy. We publish what we don't sell and why. Every product has an evidence grade: A strong,
+B good, C emerging.
+
+**Look.** Near-black ink, bone paper and one signal colour, Alpenglow orange. Condensed display type
+(Archivo), Inter for body text, JetBrains Mono for technical labels. Arc'teryx-style spec tables and
+hairline grids. The hero is a ridgeline whose summit is the spike of a pulse.
+
+---
+
+## Before launch
+
+The catalog ships with planning estimates. Before taking real orders:
+
+- [ ] Replace every `supplier: "TBC"` and estimated `unitCostGBP` with contracted quotes.
+- [ ] Register as a food business (UK: with your local authority 28+ days before trading) and notify
+      EU member states before selling there.
+- [ ] Batch-test supplements with Informed Sport or equivalent before marketing to tested athletes.
+- [ ] Have label artwork and on-site claims reviewed against UK/EU rules.
+- [ ] Only use licensed ingredient trademarks (e.g. Creapure®, Celliant®) with a signed licence.
+- [ ] Add `STRIPE_SECRET_KEY`, `NEXT_PUBLIC_SITE_URL` and `OPS_PASSWORD`.
+- [ ] Have the legal page reviewed by a solicitor.
+- [ ] Replace generated art with product photography as samples arrive.
+
+The ops console carries per-product compliance notes, including where claims do *not* apply
+(for example, Carb 90 cannot use the carbohydrate-electrolyte claim at its concentration).
+
+## Deploying
+
+Any Node host works. On Vercel, import the repo, add the environment variables from `.env.example`,
+and deploy. No database is required: the catalog is code and orders live in Stripe.
