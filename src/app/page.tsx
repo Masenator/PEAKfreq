@@ -1,9 +1,8 @@
 import Link from "next/link";
-import { HeroArt, Topo, Wave } from "@/components/Art";
+import { Topo, Wave } from "@/components/Art";
 import { Evidence } from "@/components/Evidence";
-import { ArrowRight } from "@/components/icons";
+import { ArrowRight, Check, Flask, Loop } from "@/components/icons";
 import { ProductCard } from "@/components/ProductCard";
-import { ProductArt } from "@/components/ProductArt";
 import { StackCard } from "@/components/StackCard";
 import { brand } from "@/data/brand";
 import { articles } from "@/data/journal";
@@ -14,30 +13,36 @@ import type { EvidenceGrade, Product } from "@/data/types";
 
 const pick = (ids: string[]) => ids.map(getProduct).filter((p): p is Product => !!p && p.status === "live");
 
+/** The five frequencies step through the logo's green-to-orange fade. */
+const FADE = ["#5E9E6A", "#7E9A5A", "#A08C4A", "#C4834A", "#DB7A45"];
+
+const ListIcon = () => (
+  <svg width={22} height={22} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M9 6h11M9 12h11M9 18h11" stroke="currentColor" strokeWidth="1.5" />
+    <circle cx="4.5" cy="6" r="1.2" fill="currentColor" />
+    <circle cx="4.5" cy="12" r="1.2" fill="currentColor" />
+    <circle cx="4.5" cy="18" r="1.2" fill="currentColor" />
+  </svg>
+);
+
 export default function Home() {
   const essentials = pick(["base", "salt", "isolate", "foundation"]);
-  const apparel = pick(["pulse-tights", "merino-150", "infrared-longsleeve"]);
-  const shell = getProduct("ridge-shell");
   const graded = (g: EvidenceGrade) => liveProducts.filter((p) => p.evidence === g);
+  const pct = Math.round(brand.subscriptionDiscount * 100);
 
   return (
     <>
       {/* ── Hero ── */}
-      <section className="hero">
-        <div className="hero__art">
-          <HeroArt />
-        </div>
+      <section className="hero hero--summit">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img className="hero__img" src={brand.heroImage} alt={brand.heroImageAlt} fetchPriority="high" />
         <div className="wrap hero__content">
-          <span className="eyebrow">Evidence-graded performance</span>
-          <h1 className="display display--xl" style={{ marginTop: 24 }}>
-            Find your
-            <br />
-            <span className="signal">frequency.</span>
-          </h1>
-          <div className="hero__meta">
-            <p className="lede" style={{ opacity: 0.88 }}>
-              {brand.mission}
-            </p>
+          <div className="hero__copy">
+            <span className="eyebrow">Evidence-graded performance</span>
+            <h1 className="home-display home-display--xl">
+              Find your <span className="grad-text">frequency.</span>
+            </h1>
+            <p className="lede">{brand.mission}</p>
             <div className="hero__ctas">
               <Link href="/shop" className="btn btn--signal">
                 Shop the range <ArrowRight />
@@ -50,16 +55,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Strip ── */}
-      <div className="strip" aria-hidden="true">
-        <div className="strip__track">
-          {Array.from({ length: 2 }).flatMap((_, k) =>
-            ["Evidence over hype", "Dose disclosed", "Built for the long game", "Graded A · B · C", "Tested in the field"].map((t) => (
-              <span key={`${k}${t}`}>{t}</span>
-            )),
-          )}
+      {/* ── Trust ── */}
+      <section className="paper">
+        <div className="wrap trust">
+          <div>
+            <Flask size={22} />
+            <strong>Evidence-graded</strong>
+            <span>Every product rated A, B or C against the research.</span>
+          </div>
+          <div>
+            <ListIcon />
+            <strong>Every dose disclosed</strong>
+            <span>No proprietary blends. Ever.</span>
+          </div>
+          <div>
+            <Check size={22} />
+            <strong>Claims we can defend</strong>
+            <span>Only health claims authorised in the UK and EU.</span>
+          </div>
+          <div>
+            <Loop size={22} />
+            <strong>Subscribe &amp; save {pct}%</strong>
+            <span>Skip, swap or cancel any time.</span>
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* ── Five frequencies ── */}
       <section className="section">
@@ -67,7 +87,7 @@ export default function Home() {
           <div className="section-head">
             <div>
               <span className="eyebrow">The five frequencies</span>
-              <h2 className="display display--lg">Your body runs on rhythm.</h2>
+              <h2 className="home-display home-display--lg">Your body runs on rhythm.</h2>
               <p className="lede muted">
                 Heartbeat, stride, sleep, focus and repair all run on cycles. Performance means keeping each one on
                 time. Every product we make is built for one of them.
@@ -75,13 +95,15 @@ export default function Home() {
             </div>
           </div>
           <div className="freq-grid">
-            {frequencies.map((f) => (
+            {frequencies.map((f, i) => (
               <article className="freq" key={f.id}>
-                <div className="freq__wave">
+                <div className="freq__wave" style={{ color: FADE[i] }}>
                   <Wave kind={f.id} />
                 </div>
                 <span className="mono muted">{f.hz}</span>
-                <h3 className="freq__name">{f.name}</h3>
+                <h3 className="home-display" style={{ fontSize: "1.9rem" }}>
+                  {f.name}
+                </h3>
                 <p style={{ margin: 0, fontWeight: 600 }}>{f.body}</p>
                 <p className="muted" style={{ margin: 0, fontSize: 15 }}>
                   {f.copy}
@@ -101,7 +123,7 @@ export default function Home() {
           <div className="section-head">
             <div>
               <span className="eyebrow">Start here</span>
-              <h2 className="display display--lg">The essentials.</h2>
+              <h2 className="home-display home-display--lg">The essentials.</h2>
             </div>
             <Link href="/shop" className="link-arrow">
               Shop all {liveProducts.length} products <ArrowRight size={14} />
@@ -116,12 +138,12 @@ export default function Home() {
       </section>
 
       {/* ── Protocols ── */}
-      <section className="section dark">
+      <section className="section sand">
         <div className="wrap">
           <div className="section-head">
             <div>
               <span className="eyebrow">Protocols</span>
-              <h2 className="display display--lg">Stacks, not guesses.</h2>
+              <h2 className="home-display home-display--lg">Stacks, not guesses.</h2>
               <p className="lede muted">
                 Complete systems for a single goal, with timing for every item. Bundle price is 10% below buying each
                 one separately.
@@ -145,7 +167,7 @@ export default function Home() {
           <div className="section-head">
             <div>
               <span className="eyebrow">Our standard</span>
-              <h2 className="display display--lg">We grade everything. Including ourselves.</h2>
+              <h2 className="home-display home-display--lg">We grade everything. Including ourselves.</h2>
               <p className="lede muted">
                 Every product carries an evidence grade based on the published research, with the references. When the
                 science is early, we say so on the front of the page.
@@ -156,9 +178,9 @@ export default function Home() {
             </Link>
           </div>
           <div className="evidence-grid">
-            {(["A", "B", "C"] as EvidenceGrade[]).map((g) => (
+            {(["A", "B", "C"] as EvidenceGrade[]).map((g, i) => (
               <div className="evidence-cell" key={g}>
-                <span className="evidence-cell__grade" style={{ color: g === "A" ? "var(--signal)" : undefined }}>
+                <span className="evidence-cell__grade" style={{ color: [FADE[0], FADE[2], FADE[4]][i] }}>
                   {g}
                 </span>
                 <strong className="h3">{evidence[g].label}</strong>
@@ -178,58 +200,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Apparel ── */}
-      <section className="section sand">
-        <div className="wrap stack-v" style={{ "--gap": "clamp(48px, 7vw, 96px)" } as React.CSSProperties}>
-          <div className="split">
-            {shell && (
-              <Link href={`/products/${shell.slug}`} className="split__media" style={{ background: "var(--ink)" }}>
-                <div style={{ position: "absolute", inset: 0, opacity: 0.5 }}>
-                  <Topo color="#0E0F0F" ink="#F3F1EC" seed={2.2} />
-                </div>
-                <div style={{ position: "relative", width: "70%" }}>
-                  <ProductArt product={shell} />
-                </div>
-                <span className="chip" style={{ position: "absolute", left: 16, bottom: 16, color: "var(--bone)", borderColor: "var(--line-inv)" }}>
-                  {shell.name} · 92 g
-                </span>
-              </Link>
-            )}
-            <div className="stack-v" style={{ "--gap": "24px" } as React.CSSProperties}>
-              <span className="eyebrow">Engineered layers</span>
-              <h2 className="display display--lg">Clothing with a job to do.</h2>
-              <p className="lede">
-                What you wear changes your physiology: compression for recovery, merino for thermoregulation, cooling
-                for heat, bioceramic yarn for overnight recovery. Each piece is built for one job, and repaired for
-                life when it&apos;s outerwear.
-              </p>
-              {shell?.specs && (
-                <table className="spec">
-                  <tbody>
-                    {shell.specs.slice(0, 4).map((s) => (
-                      <tr key={s.label}>
-                        <th scope="row">{s.label}</th>
-                        <td>{s.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-              <div className="row">
-                <Link href="/shop?category=apparel" className="btn">
-                  Shop apparel <ArrowRight />
-                </Link>
-                <Link href="/shop?category=gear" className="btn btn--ghost">
-                  <span>Shop kit</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="grid grid--3">
-            {apparel.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
+      {/* ── Apparel (placeholder) ── */}
+      <section className="section paper">
+        <div className="wrap lab">
+          <span className="eyebrow">Apparel</span>
+          <h2 className="home-display home-display--lg">Working in the lab.</h2>
         </div>
       </section>
 
@@ -239,7 +214,7 @@ export default function Home() {
           <div className="section-head">
             <div>
               <span className="eyebrow">Journal</span>
-              <h2 className="display display--lg">Read the research.</h2>
+              <h2 className="home-display home-display--lg">Read the research.</h2>
             </div>
             <Link href="/journal" className="link-arrow">
               All articles <ArrowRight size={14} />
@@ -267,41 +242,40 @@ export default function Home() {
       </section>
 
       {/* ── Commitments ── */}
-      <section className="section dark">
+      <section className="section sand">
         <div className="wrap">
           <div className="section-head">
             <div>
               <span className="eyebrow">Built for the long game</span>
-              <h2 className="display display--lg">Performance that doesn&apos;t cost the mountain.</h2>
+              <h2 className="home-display home-display--lg">Performance that doesn&apos;t cost the mountain.</h2>
             </div>
           </div>
-          <div className="values">
+          <div className="values values--3">
             <div>
-              <span className="values__num signal">0</span>
+              <span className="values__num" style={{ color: FADE[0] }}>
+                0
+              </span>
               <strong>Proprietary blends</strong>
               <p className="muted" style={{ margin: 0 }}>
                 Every active ingredient and its dose, printed on the pack and on the page.
               </p>
             </div>
             <div>
-              <span className="values__num">Algae</span>
+              <span className="values__num" style={{ color: FADE[2] }}>
+                Algae
+              </span>
               <strong>Not fish</strong>
               <p className="muted" style={{ margin: 0 }}>
                 Our omega-3 comes from farmed microalgae, not the ocean.
               </p>
             </div>
             <div>
-              <span className="values__num">Mono</span>
+              <span className="values__num" style={{ color: FADE[4] }}>
+                Mono
+              </span>
               <strong>Material packaging</strong>
               <p className="muted" style={{ margin: 0 }}>
                 We&apos;re moving every pouch to recyclable mono-material film, and every stick to paper.
-              </p>
-            </div>
-            <div>
-              <span className="values__num">∞</span>
-              <strong>Repair for life</strong>
-              <p className="muted" style={{ margin: 0 }}>
-                Outerwear is repaired free for the life of the garment. The most sustainable jacket is the one you keep.
               </p>
             </div>
           </div>

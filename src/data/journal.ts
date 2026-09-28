@@ -53,7 +53,7 @@ export const articles: Article[] = [
     category: "Science",
     readMins: 7,
     date: "2026-08-18",
-    color: "#FF5B24",
+    color: "#DB7A45",
     body: [
       { type: "p", text: "Creatine has been studied in hundreds of trials since the early 1990s. The core finding hasn't moved: about 3–5 g a day tops up muscle phosphocreatine and lets you do more work in repeated hard efforts." },
       { type: "h", text: "Endurance athletes" },
@@ -91,7 +91,7 @@ export const articles: Article[] = [
     category: "Heat",
     readMins: 4,
     date: "2026-06-30",
-    color: "#FF7A45",
+    color: "#E59A6B",
     body: [
       { type: "p", text: "In the heat, your performance ceiling is partly set by how much thermal headroom you have before your brain starts turning the pace down. Precooling buys you headroom before the gun goes." },
       { type: "p", text: "The research favours mixed methods: a [[precool-vest|cooling vest]] through the warm-up plus an ice-slurry drink 30 minutes out. Then hold your sodium with [[salt]] and dress for evaporation in the [[glacier-tee|Glacier tee]]." },

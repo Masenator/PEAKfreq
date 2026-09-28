@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 export default async function StackPage({ params }: { params: Params }) {
   const stack = getStack((await params).slug);
   if (!stack) notFound();
-  const light = ["#EDE9E1", "#A9CBDD"].includes(stack.color);
+  const light = ["#EDE9E1", "#A9CBDD", "#DB7A45"].includes(stack.color);
 
   return (
     <>

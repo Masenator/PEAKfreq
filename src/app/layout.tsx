@@ -46,8 +46,6 @@ const ANNOUNCEMENTS = [
   `Free shipping over ${brand.currencies.map((c) => formatMoney(brand.freeShippingThreshold[c], c)).join(" / ")}`,
   `Subscribe & save ${Math.round(brand.subscriptionDiscount * 100)}%`,
   "Every product evidence-graded A, B or C",
-  "Dose disclosed. No proprietary blends",
-  "Free repairs on outerwear for life",
 ];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -59,11 +57,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             Skip to content
           </a>
           <div className="announce" aria-label="Announcements">
-            <div className="announce__track">
-              {[...ANNOUNCEMENTS, ...ANNOUNCEMENTS].map((a, i) => (
-                <span key={i} aria-hidden={i >= ANNOUNCEMENTS.length}>
-                  {a}
-                </span>
+            <div className="wrap announce__inner">
+              {ANNOUNCEMENTS.map((a) => (
+                <span key={a}>{a}</span>
               ))}
             </div>
           </div>

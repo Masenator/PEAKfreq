@@ -11,7 +11,7 @@ export function Footer() {
         <div className="newsletter" style={{ paddingBottom: "clamp(48px, 7vw, 88px)" }}>
           <div className="stack-v">
             <span className="eyebrow">Field notes</span>
-            <h2 className="display display--md">Research, not hype. Once a fortnight.</h2>
+            <h2 className="home-display home-display--lg">Research, not hype. Once a fortnight.</h2>
           </div>
           <Newsletter />
         </div>

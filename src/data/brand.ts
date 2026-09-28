@@ -36,10 +36,18 @@ export const brand = {
     ink: "#0E0F0F",
     bone: "#F3F1EC",
     stone: "#D8D3C8",
-    signal: "#FF5B24",
+    signal: "#DB7A45",
+    sage: "#5E9E6A",
+    forest: "#2F4538",
     glacier: "#A9CBDD",
     moss: "#3E5641",
   },
+  /**
+   * Homepage hero image. Swap for a photo in /public (e.g. "/hero/summit.jpg");
+   * the illustration is a placeholder.
+   */
+  heroImage: "/hero/summit.svg",
+  heroImageAlt: "An athlete with arms raised on a mountain summit at sunrise",
   /** Logo mark gradient, left to right (from the embroidered logo). */
   logoGradient: ["#5E9E6A", "#6E9A62", "#A08C4A", "#DB7A45"],
 } as const;

@@ -56,7 +56,9 @@ product. It replaces the generated label art everywhere.
 ### Rebranding the whole store
 
 `src/data/brand.ts` holds the name, wordmark, mission, contact details, currencies, free-shipping
-thresholds, subscription discount and shipping countries. Colours are CSS variables at the top of
+thresholds, subscription discount, shipping countries and the homepage hero image. The hero is an
+illustration placeholder (`public/hero/summit.svg`); drop a photo in `public/hero/` and point
+`heroImage` at it. Colours are CSS variables at the top of
 `src/app/globals.css`.
 
 ---

@@ -18,7 +18,7 @@ export const stacks: Stack[] = [
       { productId: "pulse-tights", when: "After: wear 2–12 h post-session" },
     ],
     discount: 0.1,
-    color: "#FF5B24",
+    color: "#DB7A45",
   },
   {
     id: "strength",

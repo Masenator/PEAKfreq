@@ -31,14 +31,14 @@ const SUPPLEMENT_COMPLIANCE = [
 ];
 
 /* Line palettes */
-const FUEL = { color: "#FF5B24", ink: "#0E0F0F", accent: "#0E0F0F" };
-const HYDRATE = { color: "#A9CBDD", ink: "#0E0F0F", accent: "#FF5B24" };
-const BUILD = { color: "#EDE9E1", ink: "#0E0F0F", accent: "#FF5B24" };
+const FUEL = { color: "#DB7A45", ink: "#0E0F0F", accent: "#0E0F0F" };
+const HYDRATE = { color: "#A9CBDD", ink: "#0E0F0F", accent: "#DB7A45" };
+const BUILD = { color: "#EDE9E1", ink: "#0E0F0F", accent: "#DB7A45" };
 const RECOVER = { color: "#7A1F2B", ink: "#F3F1EC", accent: "#FFB199" };
 const SLEEP = { color: "#262A5C", ink: "#F3F1EC", accent: "#A9CBDD" };
 const FOCUS = { color: "#D6F04A", ink: "#0E0F0F", accent: "#0E0F0F" };
 const DAILY = { color: "#3E5641", ink: "#F3F1EC", accent: "#D6F04A" };
-const CARBON = { color: "#1A1C1D", ink: "#F3F1EC", accent: "#FF5B24" };
+const CARBON = { color: "#1A1C1D", ink: "#F3F1EC", accent: "#DB7A45" };
 
 export const products: Product[] = [
   /* ─────────────────────────── FUEL ─────────────────────────── */
@@ -147,7 +147,7 @@ export const products: Product[] = [
     claims: [],
     warnings: SUPPLEMENT_WARNINGS.slice(0, 1),
     badges: ["Vegan", "Gluten free", "1:0.8 ratio"],
-    art: { format: "pouch", ...FUEL, color: "#FF7A45" },
+    art: { format: "pouch", ...FUEL, color: "#E59A6B" },
     status: "live",
     whiteLabel: {
       supplier: "TBC",
@@ -211,7 +211,7 @@ export const products: Product[] = [
     claims: [],
     warnings: [...SUPPLEMENT_WARNINGS, CAFFEINE_WARNING],
     badges: ["Vegan", "Dose disclosed", "Stim-free option"],
-    art: { format: "tub", ...FUEL, color: "#E8471A" },
+    art: { format: "tub", ...FUEL, color: "#C4652F" },
     status: "live",
     whiteLabel: {
       supplier: "TBC",
@@ -837,7 +837,7 @@ export const products: Product[] = [
     claims: [],
     warnings: [],
     badges: ["Evidence grade C", "TENCEL™ blend"],
-    art: { format: "longsleeve", color: "#D8D3C8", ink: "#0E0F0F", accent: "#FF5B24" },
+    art: { format: "longsleeve", color: "#D8D3C8", ink: "#0E0F0F", accent: "#DB7A45" },
     status: "live",
     whiteLabel: {
       supplier: "TBC",
@@ -939,7 +939,7 @@ export const products: Product[] = [
     claims: [],
     warnings: [],
     badges: ["Recycled", "UPF 30+"],
-    art: { format: "tee", color: "#A9CBDD", ink: "#0E0F0F", accent: "#FF5B24" },
+    art: { format: "tee", color: "#A9CBDD", ink: "#0E0F0F", accent: "#DB7A45" },
     status: "live",
     whiteLabel: {
       supplier: "TBC",

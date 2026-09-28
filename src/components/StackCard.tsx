@@ -8,7 +8,7 @@ import { StackPrice } from "./StackPrice";
 
 export function StackCard({ stack }: { stack: Stack }) {
   const items = stack.items.map((i) => getProduct(i.productId)).filter((p): p is Product => !!p);
-  const light = ["#EDE9E1", "#A9CBDD"].includes(stack.color);
+  const light = ["#EDE9E1", "#A9CBDD", "#DB7A45"].includes(stack.color);
   return (
     <article
       className="stack-card"
