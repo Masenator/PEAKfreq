@@ -205,10 +205,13 @@ export function SummitHero({ label, className }: { label: string; className?: st
       const sunY = lerp(SUN_START_Y, SUN_END_Y, sunT);
       sunRef.current?.setAttribute("transform", `translate(${apex.x} ${sunY.toFixed(1)})`);
       sunRef.current?.setAttribute("opacity", (0.35 + 0.65 * clamp(sunT * 1.6)).toFixed(3));
+      // Rays burst out as the hero turns orange, then turn and breathe slowly.
       if (raysRef.current) {
+        const ray = easeOut(lotusT);
         const breathe = 1 + 0.04 * Math.sin(t * 1.3);
-        raysRef.current.setAttribute("transform", `rotate(${(t * 4).toFixed(2)}) scale(${breathe.toFixed(3)})`);
-        raysRef.current.setAttribute("opacity", (0.2 + 0.8 * clamp(sunT * 1.4)).toFixed(3));
+        const grow = 0.45 + 0.55 * ray;
+        raysRef.current.setAttribute("transform", `rotate(${(t * 4).toFixed(2)}) scale(${(grow * breathe).toFixed(3)})`);
+        raysRef.current.setAttribute("opacity", ray.toFixed(3));
       }
 
       let hx: number;
@@ -328,7 +331,7 @@ export function SummitHero({ label, className }: { label: string; className?: st
       <rect width={SUMMIT_W} height={SUMMIT_H} fill="url(#pf-sky)" />
       <g ref={sunRef} transform={`translate(${SUMMIT_APEX.x} ${SUN_START_Y})`} opacity={0.35}>
         <circle r={340} fill="url(#pf-sunglow)" />
-        <g ref={raysRef} fill="url(#pf-ray)">
+        <g ref={raysRef} fill="url(#pf-ray)" opacity={0}>
           {RAYS.map((d, i) => (
             <path key={i} d={d} />
           ))}

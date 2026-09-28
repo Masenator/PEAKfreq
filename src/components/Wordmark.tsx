@@ -3,7 +3,8 @@ import { WM_ASPECT, WM_FREQ, WM_GRAD_X, WM_PEAK, WM_PULSE, WM_VIEWBOX } from "./
 
 /** Outline widths in wordmark units (cap height ≈ 69). */
 const WHITE = 8;
-const BLACK = 14;
+const OUTER = 14;
+const PULSE_W = 4.2;
 
 /** Gradient for "freq" and its pulse, in wordmark coordinates. */
 export function WordmarkGradient({ id }: { id: string }) {
@@ -19,7 +20,8 @@ export function WordmarkGradient({ id }: { id: string }) {
 
 /**
  * Wordmark shapes for embedding in another SVG. Origin is the baseline at the left of "P".
- * Full colour: green PEAK with a white outline and black outer line; gradient freq.
+ * Full colour: black PEAK with a white outline and green outer line; gradient freq whose
+ * pulse carries on from the tail of the q.
  * Pass `mono` for single-colour use (packaging).
  */
 export function WordmarkPaths({ id, mono }: { id: string; mono?: string }) {
@@ -28,7 +30,7 @@ export function WordmarkPaths({ id, mono }: { id: string; mono?: string }) {
       <g>
         <path d={WM_PEAK} fill={mono} />
         <path d={WM_FREQ} fill={mono} />
-        <path d={WM_PULSE} fill="none" stroke={mono} strokeWidth={3.6} strokeLinejoin="round" strokeLinecap="round" />
+        <path d={WM_PULSE} fill="none" stroke={mono} strokeWidth={PULSE_W} strokeLinejoin="round" strokeLinecap="round" />
       </g>
     );
   }
@@ -38,11 +40,11 @@ export function WordmarkPaths({ id, mono }: { id: string; mono?: string }) {
       <defs>
         <WordmarkGradient id={`${id}-g`} />
       </defs>
-      <path d={WM_PEAK} fill="none" stroke="#0E0F0F" strokeWidth={BLACK} strokeLinejoin="round" />
+      <path d={WM_PEAK} fill="none" stroke={brand.logoGradient[0]} strokeWidth={OUTER} strokeLinejoin="round" />
       <path d={WM_PEAK} fill="none" stroke="#FFFFFF" strokeWidth={WHITE} strokeLinejoin="round" />
-      <path d={WM_PEAK} fill={brand.logoGradient[0]} />
+      <path d={WM_PEAK} fill="#0E0F0F" />
       <path d={WM_FREQ} fill={grad} />
-      <path d={WM_PULSE} fill="none" stroke={grad} strokeWidth={3.6} strokeLinejoin="round" strokeLinecap="round" />
+      <path d={WM_PULSE} fill="none" stroke={grad} strokeWidth={PULSE_W} strokeLinejoin="round" strokeLinecap="round" />
     </g>
   );
 }

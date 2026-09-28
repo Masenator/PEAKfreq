@@ -1755,7 +1755,7 @@ textarea {
 
 .footer__giant {
   padding: 24px var(--gutter) 0;
-  margin-bottom: -2.2vw;
+  padding-bottom: 20px;
   user-select: none;
 }
 
