@@ -14,7 +14,7 @@ import { SUMMIT_APEX, SUMMIT_DEFS, SUMMIT_FRONT, SUMMIT_H, SUMMIT_LAND, SUMMIT_T
 
 /* ── Timeline (seconds) ── */
 const T_DELAY = 0.6;
-const T_RUN = 6.6;
+const T_RUN = 8.8;
 const T_JUMP = 0.9;
 const T_LOTUS = 1.3;
 const T_END = T_DELAY + T_RUN + T_JUMP + T_LOTUS;
@@ -28,13 +28,23 @@ const UPPER_ARM = 12.5 * K;
 const FOREARM = 11 * K;
 const HEAD_R = 6.2 * K;
 const NECK = 9.4 * K;
-const STRIDE = 34 * K;
+const STRIDE = 78 * K; // distance per full gait cycle (two steps)
 const LEG_REACH = 27.5 * K; // hip height above the ground while running
 
 const HOVER = 86; // hip height above the summit when levitating
 const SUN_R = 74;
 const SUN_START_Y = SUMMIT_APEX.y + 320;
 const SUN_END_Y = SUMMIT_APEX.y - HOVER - 14;
+
+/** Tapered sun rays, alternating long and short. */
+const RAYS = Array.from({ length: 20 }, (_, i) => {
+  const a = (i / 20) * Math.PI * 2;
+  const r1 = SUN_R + 10;
+  const r2 = i % 2 ? SUN_R + 70 : SUN_R + 118;
+  const w = i % 2 ? 0.05 : 0.07;
+  const p = (ang: number, r: number) => `${(Math.cos(ang) * r).toFixed(1)},${(Math.sin(ang) * r).toFixed(1)}`;
+  return `M${p(a - w, r1)}L${p(a, r2)}L${p(a + w, r1)}Z`;
+});
 
 const DARK = [35, 44, 38];
 const ORANGE = [219, 122, 69];
@@ -64,23 +74,24 @@ function blend(a: Pose, b: Pose, t: number): Pose {
   };
 }
 
-/** Running pose at gait phase `phi`, facing +1 (right) or −1 (left). */
+/** Running pose at gait phase `phi`, facing +1 (right) to −1 (left); values between turn the runner. */
 function runPose(phi: number, face: number): Pose {
+  // Smooth, relaxed jog: modest hip swing, knee bend peaking during the forward swing.
   const leg = (p: number) => {
-    const thigh = 0.2 + 0.62 * Math.sin(p);
-    const bend = 0.25 + 1.25 * clamp(-Math.sin(p - 0.9), 0, 1);
+    const thigh = 0.12 + 0.5 * Math.sin(p);
+    const bend = 0.3 + 0.85 * (0.5 + 0.5 * Math.cos(p + 0.25));
     return [thigh, thigh - bend];
   };
   const arm = (p: number) => {
-    const upper = -0.7 * Math.sin(p) + 0.1;
-    return [upper, upper + 1.45];
+    const upper = -0.42 * Math.sin(p) + 0.12;
+    return [upper, upper + 1.35];
   };
   const [t1, s1] = leg(phi);
   const [t2, s2] = leg(phi + Math.PI);
   const [u1, f1] = arm(phi);
   const [u2, f2] = arm(phi + Math.PI);
   return {
-    lean: 0.3 * face,
+    lean: 0.22 * face,
     thigh: [t1 * face, t2 * face],
     shin: [s1 * face, s2 * face],
     upper: [u1 * face, u2 * face],
@@ -140,6 +151,7 @@ export function SummitHero({ label, className }: { label: string; className?: st
   const trackRef = useRef<SVGPathElement>(null);
   const glowRef = useRef<SVGPathElement>(null);
   const sunRef = useRef<SVGGElement>(null);
+  const raysRef = useRef<SVGGElement>(null);
   const figRef = useRef<SVGGElement>(null);
   const legsRef = useRef<SVGPathElement>(null);
   const armsRef = useRef<SVGPathElement>(null);
@@ -153,15 +165,27 @@ export function SummitHero({ label, className }: { label: string; className?: st
     const L = trail.getTotalLength();
     const apex = SUMMIT_APEX;
 
-    // Facing direction along the trail, sampled ahead so turns look natural.
+    // Facing direction along the trail, smoothed so the runner turns at switchbacks.
     const faceAt = (s: number) => {
-      const a = trail.getPointAtLength(Math.max(0, s - 2));
-      const b = trail.getPointAtLength(Math.min(L, s + 6));
-      return b.x >= a.x ? 1 : -1;
+      const a = trail.getPointAtLength(Math.max(0, s - 9));
+      const b = trail.getPointAtLength(Math.min(L, s + 9));
+      const dx = b.x - a.x;
+      const f = clamp(dx / 12, -1, 1);
+      return Math.abs(f) < 0.2 ? Math.sign(dx || 1) * 0.2 : f;
+    };
+
+    // Trapezoid speed profile: ease in and out, steady pace in between.
+    const runProgress = (u: number) => {
+      const a = 0.08;
+      const v = 1 / (1 - a);
+      const x = clamp(u);
+      if (x < a) return (0.5 * v * x * x) / a;
+      if (x > 1 - a) return 1 - (0.5 * v * (1 - x) * (1 - x)) / a;
+      return 0.5 * v * a + v * (x - a);
     };
 
     const render = (t: number) => {
-      const run = easeInOut((t - T_DELAY) / T_RUN);
+      const run = runProgress((t - T_DELAY) / T_RUN);
       const s = run * L;
       const jumpT = clamp((t - T_DELAY - T_RUN) / T_JUMP);
       const lotusT = clamp((t - T_DELAY - T_RUN - T_JUMP) / T_LOTUS);
@@ -181,6 +205,11 @@ export function SummitHero({ label, className }: { label: string; className?: st
       const sunY = lerp(SUN_START_Y, SUN_END_Y, sunT);
       sunRef.current?.setAttribute("transform", `translate(${apex.x} ${sunY.toFixed(1)})`);
       sunRef.current?.setAttribute("opacity", (0.35 + 0.65 * clamp(sunT * 1.6)).toFixed(3));
+      if (raysRef.current) {
+        const breathe = 1 + 0.04 * Math.sin(t * 1.3);
+        raysRef.current.setAttribute("transform", `rotate(${(t * 4).toFixed(2)}) scale(${breathe.toFixed(3)})`);
+        raysRef.current.setAttribute("opacity", (0.2 + 0.8 * clamp(sunT * 1.4)).toFixed(3));
+      }
 
       let hx: number;
       let hy: number;
@@ -191,7 +220,7 @@ export function SummitHero({ label, className }: { label: string; className?: st
         const p = trail.getPointAtLength(s);
         face = faceAt(s);
         const phi = (s / STRIDE) * Math.PI * 2;
-        const bob = -2.2 * Math.abs(Math.sin(phi));
+        const bob = -1.6 * (0.5 - 0.5 * Math.cos(2 * phi));
         hx = p.x;
         hy = p.y - LEG_REACH + bob;
         pose = run > 0 && run < 1 ? runPose(phi, face) : blend(runPose(phi, face), runPose(Math.PI / 2, face), 0.6);
@@ -285,6 +314,10 @@ export function SummitHero({ label, className }: { label: string; className?: st
           <stop offset="0.25" stopColor="#F7D2A4" stopOpacity="0.75" />
           <stop offset="1" stopColor="#F3D9B8" stopOpacity="0" />
         </radialGradient>
+        <radialGradient id="pf-ray" cx="0" cy="0" r="190" gradientUnits="userSpaceOnUse">
+          <stop offset="0.35" stopColor="#F6C185" stopOpacity="0.85" />
+          <stop offset="1" stopColor="#F6C185" stopOpacity="0" />
+        </radialGradient>
         <radialGradient id="pf-aura">
           <stop offset="0" stopColor="#F2A36B" stopOpacity="0.55" />
           <stop offset="1" stopColor="#F2A36B" stopOpacity="0" />
@@ -295,6 +328,11 @@ export function SummitHero({ label, className }: { label: string; className?: st
       <rect width={SUMMIT_W} height={SUMMIT_H} fill="url(#pf-sky)" />
       <g ref={sunRef} transform={`translate(${SUMMIT_APEX.x} ${SUN_START_Y})`} opacity={0.35}>
         <circle r={340} fill="url(#pf-sunglow)" />
+        <g ref={raysRef} fill="url(#pf-ray)">
+          {RAYS.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
+        </g>
         <circle r={SUN_R} fill="#FAE1BD" />
       </g>
 

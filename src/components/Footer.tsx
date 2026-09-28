@@ -79,7 +79,7 @@ export function Footer() {
         </div>
       </div>
       <div className="footer__giant" aria-hidden="true">
-        <Wordmark id="wm-footer" peak="#3a5446" height={400} />
+        <Wordmark id="wm-footer" height={400} />
       </div>
     </footer>
   );

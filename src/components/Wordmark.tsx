@@ -1,5 +1,9 @@
 import { brand } from "@/data/brand";
-import { WM_ASPECT, WM_FREQ, WM_GRAD_X, WM_PEAK, WM_PULSE, WM_RIDGE_CLIP, WM_VIEWBOX } from "./wordmark-paths";
+import { WM_ASPECT, WM_FREQ, WM_GRAD_X, WM_PEAK, WM_PULSE, WM_VIEWBOX } from "./wordmark-paths";
+
+/** Outline widths in wordmark units (cap height ≈ 69). */
+const WHITE = 8;
+const BLACK = 14;
 
 /** Gradient for "freq" and its pulse, in wordmark coordinates. */
 export function WordmarkGradient({ id }: { id: string }) {
@@ -14,39 +18,46 @@ export function WordmarkGradient({ id }: { id: string }) {
 }
 
 /**
- * Wordmark shapes for embedding in another SVG. Origin is the baseline at the left of "P";
- * cap height is ~69 units, total width ~447.
+ * Wordmark shapes for embedding in another SVG. Origin is the baseline at the left of "P".
+ * Full colour: green PEAK with a white outline and black outer line; gradient freq.
+ * Pass `mono` for single-colour use (packaging).
  */
-export function WordmarkPaths({ id, peak, freq }: { id: string; peak: string; freq?: string }) {
-  const f = freq ?? `url(#${id}-g)`;
+export function WordmarkPaths({ id, mono }: { id: string; mono?: string }) {
+  if (mono) {
+    return (
+      <g>
+        <path d={WM_PEAK} fill={mono} />
+        <path d={WM_FREQ} fill={mono} />
+        <path d={WM_PULSE} fill="none" stroke={mono} strokeWidth={3.6} strokeLinejoin="round" strokeLinecap="round" />
+      </g>
+    );
+  }
+  const grad = `url(#${id}-g)`;
   return (
     <g>
       <defs>
-        {!freq && <WordmarkGradient id={`${id}-g`} />}
-        <clipPath id={`${id}-ridge`}>
-          <path d={WM_RIDGE_CLIP} />
-        </clipPath>
+        <WordmarkGradient id={`${id}-g`} />
       </defs>
-      <path d={WM_PEAK} fill={peak} clipPath={`url(#${id}-ridge)`} />
-      <path d={WM_FREQ} fill={f} />
-      <path d={WM_PULSE} fill="none" stroke={f} strokeWidth={3.4} strokeLinejoin="round" strokeLinecap="round" />
+      <path d={WM_PEAK} fill="none" stroke="#0E0F0F" strokeWidth={BLACK} strokeLinejoin="round" />
+      <path d={WM_PEAK} fill="none" stroke="#FFFFFF" strokeWidth={WHITE} strokeLinejoin="round" />
+      <path d={WM_PEAK} fill={brand.logoGradient[0]} />
+      <path d={WM_FREQ} fill={grad} />
+      <path d={WM_PULSE} fill="none" stroke={grad} strokeWidth={3.6} strokeLinejoin="round" strokeLinecap="round" />
     </g>
   );
 }
 
-/** Standalone wordmark. `peak` colours PEAK; `freq` overrides the gradient on "freq". */
+/** Standalone wordmark. */
 export function Wordmark({
   height = 26,
   id = "wm",
-  peak = "currentColor",
-  freq,
+  mono,
   className,
   title,
 }: {
   height?: number;
   id?: string;
-  peak?: string;
-  freq?: string;
+  mono?: string;
   className?: string;
   title?: string;
 }) {
@@ -60,7 +71,7 @@ export function Wordmark({
       aria-label={title}
       aria-hidden={title ? undefined : true}
     >
-      <WordmarkPaths id={id} peak={peak} freq={freq} />
+      <WordmarkPaths id={id} mono={mono} />
     </svg>
   );
 }

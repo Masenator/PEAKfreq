@@ -19,10 +19,10 @@ function fit(text: string, width: number, max: number) {
 /** Vector wordmark on packaging, single colour. `size` ≈ the old font size; (x, y) = baseline centre. */
 function Wordmark({ x, y, size, fill, id }: { x: number; y: number; size: number; fill: string; id: string }) {
   const scale = (size * 0.74) / 69; // cap height matches the previous text wordmark
-  const w = 447 * scale;
+  const w = 480 * scale;
   return (
     <g transform={`translate(${(x - w / 2).toFixed(1)} ${y}) scale(${scale.toFixed(4)})`}>
-      <WordmarkPaths id={id} peak={fill} freq={fill} />
+      <WordmarkPaths id={id} mono={fill} />
     </g>
   );
 }
