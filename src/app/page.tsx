@@ -44,8 +44,8 @@ export default function Home() {
         <div className="wrap hero__content">
           <div className="hero__copy">
             <span className="eyebrow">Evidence-graded performance</span>
-            <h1 className="home-display home-display--xl">
-              Find your <span className="grad-text">frequency.</span>
+            <h1 className="home-display home-display--hero">
+              Reach your peak frequency, realise your <span className="grad-text">full potential.</span>
             </h1>
             <p className="lede">{brand.mission}</p>
             <div className="hero__ctas">

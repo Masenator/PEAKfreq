@@ -1992,6 +1992,12 @@ textarea {
   line-height: 0.98;
 }
 
+.home-display--hero {
+  font-size: clamp(2.5rem, 4.5vw, 4.4rem);
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
 .home-display--lg {
   font-size: clamp(2.1rem, 4vw, 3.5rem);
 }
