@@ -43,11 +43,12 @@ export const brand = {
     moss: "#3E5641",
   },
   /**
-   * Homepage hero image. Swap for a photo in /public (e.g. "/hero/summit.jpg");
-   * the illustration is a placeholder.
+   * Homepage hero. null = the animated summit scene (SummitHero). Set a path to a
+   * photo in /public (e.g. "/hero/summit.jpg") to use a still image instead.
    */
-  heroImage: "/hero/summit.svg",
-  heroImageAlt: "An athlete with arms raised on a mountain summit at sunrise",
+  heroImage: null as string | null,
+  heroImageAlt:
+    "An athlete runs up a mountain trail at sunrise, leaving an orange track, then rises into a lotus pose above the summit as the sun comes up behind them",
   /** Logo mark gradient, left to right (from the embroidered logo). */
   logoGradient: ["#5E9E6A", "#6E9A62", "#A08C4A", "#DB7A45"],
 } as const;

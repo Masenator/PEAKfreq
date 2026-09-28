@@ -4,6 +4,7 @@ import { Evidence } from "@/components/Evidence";
 import { ArrowRight, Check, Flask, Loop } from "@/components/icons";
 import { ProductCard } from "@/components/ProductCard";
 import { StackCard } from "@/components/StackCard";
+import { SummitHero } from "@/components/SummitHero";
 import { brand } from "@/data/brand";
 import { articles } from "@/data/journal";
 import { getProduct, liveProducts } from "@/data/products";
@@ -34,8 +35,12 @@ export default function Home() {
     <>
       {/* ── Hero ── */}
       <section className="hero hero--summit">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img className="hero__img" src={brand.heroImage} alt={brand.heroImageAlt} fetchPriority="high" />
+        {brand.heroImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img className="hero__img" src={brand.heroImage} alt={brand.heroImageAlt} fetchPriority="high" />
+        ) : (
+          <SummitHero className="hero__img" label={brand.heroImageAlt} />
+        )}
         <div className="wrap hero__content">
           <div className="hero__copy">
             <span className="eyebrow">Evidence-graded performance</span>

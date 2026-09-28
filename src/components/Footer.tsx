@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { brand } from "@/data/brand";
 import { Logo } from "./Logo";
+import { Wordmark } from "./Wordmark";
 import { Newsletter } from "./Newsletter";
 
 export function Footer() {
@@ -77,10 +78,9 @@ export function Footer() {
           </span>
         </div>
       </div>
-      <p className="footer__giant" aria-hidden="true">
-        {brand.wordmark.strong}
-        <span>{brand.wordmark.light}</span>
-      </p>
+      <div className="footer__giant" aria-hidden="true">
+        <Wordmark id="wm-footer" peak="#3a5446" height={400} />
+      </div>
     </footer>
   );
 }

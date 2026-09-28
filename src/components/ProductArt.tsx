@@ -1,6 +1,7 @@
 import { brand } from "@/data/brand";
 import type { Product } from "@/data/types";
 import { MARK_W, MarkGradient, MarkPaths } from "./LogoMark";
+import { WordmarkPaths } from "./Wordmark";
 
 /**
  * Generated label art. Renders packaging or a garment silhouette from catalog
@@ -15,12 +16,14 @@ function fit(text: string, width: number, max: number) {
   return Math.min(max, width / (text.length * 0.5));
 }
 
-function Wordmark({ x, y, size, fill, anchor = "middle" }: { x: number; y: number; size: number; fill: string; anchor?: "middle" | "start" }) {
+/** Vector wordmark on packaging, single colour. `size` ≈ the old font size; (x, y) = baseline centre. */
+function Wordmark({ x, y, size, fill, id }: { x: number; y: number; size: number; fill: string; id: string }) {
+  const scale = (size * 0.74) / 69; // cap height matches the previous text wordmark
+  const w = 447 * scale;
   return (
-    <text x={x} y={y} fill={fill} textAnchor={anchor} style={{ fontFamily: "var(--font-display)", fontSize: size }}>
-      <tspan style={{ fontWeight: 900, fontVariationSettings: "'wdth' 75" }}>{brand.wordmark.strong}</tspan>
-      <tspan style={{ fontWeight: 300 }}>{brand.wordmark.light}</tspan>
-    </text>
+    <g transform={`translate(${(x - w / 2).toFixed(1)} ${y}) scale(${scale.toFixed(4)})`}>
+      <WordmarkPaths id={id} peak={fill} freq={fill} />
+    </g>
   );
 }
 
@@ -109,7 +112,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <text x={200} y={384} textAnchor="middle" fill={ink} style={{ ...MONO, fontSize: 10 }} opacity={0.8}>
             {p.size.toUpperCase()}
           </text>
-          <Wordmark x={200} y={420} size={20} fill={ink} />
+          <Wordmark x={200} y={420} size={20} fill={ink} id={`wm-${p.id}`} />
         </>,
       );
     case "tub":
@@ -128,7 +131,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <text x={200} y={400} textAnchor="middle" fill={color} style={{ ...MONO, fontSize: 10 }}>
             {p.size.toUpperCase()}
           </text>
-          <Wordmark x={200} y={438} size={18} fill={ink} />
+          <Wordmark x={200} y={438} size={18} fill={ink} id={`wm-${p.id}`} />
         </>,
       );
     case "bottle":
@@ -146,7 +149,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <text x={200} y={396} textAnchor="middle" fill={ink} style={{ ...MONO, fontSize: 9.5 }} opacity={0.8}>
             {p.size.toUpperCase()}
           </text>
-          <Wordmark x={200} y={430} size={17} fill={ink} />
+          <Wordmark x={200} y={430} size={17} fill={ink} id={`wm-${p.id}`} />
         </>,
       );
     case "sticks":
@@ -166,7 +169,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <text x={200} y={395} textAnchor="middle" fill={ink} style={{ ...MONO, fontSize: 10 }} opacity={0.8}>
             {p.size.toUpperCase()}
           </text>
-          <Wordmark x={200} y={432} size={19} fill={ink} />
+          <Wordmark x={200} y={432} size={19} fill={ink} id={`wm-${p.id}`} />
         </>,
       );
     case "liquid":
@@ -178,7 +181,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <path d="M176 72 H224 V120 Q290 150 290 210 V430 Q290 452 268 452 H132 Q110 452 110 430 V210 Q110 150 176 120 Z" fill={`url(#${sheen})`} />
           <rect x={110} y={220} width={180} height={190} fill={p.art.ink === "#F3F1EC" ? "#F3F1EC" : "#0E0F0F"} opacity={0.08} />
           <Label p={p} cx={200} top={240} width={150} />
-          <Wordmark x={200} y={434} size={16} fill={ink} />
+          <Wordmark x={200} y={434} size={16} fill={ink} id={`wm-${p.id}`} />
         </>,
       );
     case "tee":
@@ -284,7 +287,7 @@ export function ProductArt({ product, className, title = true }: { product: Prod
           <path d="M186 214 Q200 200 214 214" fill="none" stroke={color} strokeWidth={10} />
           <path d="M62 210 L100 250" stroke="#fff" strokeOpacity={0.45} strokeWidth={6} strokeLinecap="round" />
           <path d="M236 210 L274 250" stroke="#fff" strokeOpacity={0.45} strokeWidth={6} strokeLinecap="round" />
-          <Wordmark x={200} y={352} size={22} fill="#0E0F0F" />
+          <Wordmark x={200} y={352} size={22} fill={"#0E0F0F"} id={`wm-${p.id}`} />
         </>,
       );
     case "bands":

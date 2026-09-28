@@ -1,14 +1,12 @@
 import { brand } from "@/data/brand";
 import { LogoMark } from "./LogoMark";
+import { Wordmark } from "./Wordmark";
 
 export function Logo({ id = "pf-logo" }: { id?: string }) {
   return (
-    <span className="logo">
+    <span className="logo" aria-label={brand.name}>
       <LogoMark height={26} id={id} strokeWidth={7} />
-      <span className="logo__word">
-        <b>{brand.wordmark.strong}</b>
-        <i>{brand.wordmark.light}</i>
-      </span>
+      <Wordmark height={27} id={`${id}-wm`} className="logo__wordmark" />
     </span>
   );
 }
