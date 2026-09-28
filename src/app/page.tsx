@@ -45,7 +45,8 @@ export default function Home() {
           <div className="hero__copy">
             <span className="eyebrow">Evidence-graded performance</span>
             <h1 className="home-display home-display--hero">
-              Reach your peak frequency, realise your <span className="grad-text">full potential.</span>
+              Reach your <span className="grad-text">peak frequency.</span>
+              <span className="hero__subhead">Realise your full potential.</span>
             </h1>
             <p className="lede">{brand.mission}</p>
             <div className="hero__ctas">

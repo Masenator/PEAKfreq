@@ -1993,9 +1993,18 @@ textarea {
 }
 
 .home-display--hero {
-  font-size: clamp(2.5rem, 4.5vw, 4.4rem);
-  line-height: 1.02;
+  font-size: clamp(2.7rem, 5.6vw, 5.4rem);
+  line-height: 0.98;
   text-wrap: balance;
+}
+
+.hero__subhead {
+  display: block;
+  margin-top: 0.34em;
+  font-size: 0.5em;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  line-height: 1.05;
 }
 
 .home-display--lg {
@@ -2025,7 +2034,7 @@ textarea {
 }
 
 .hero--summit .hero__copy {
-  max-width: 560px;
+  max-width: 620px;
   display: grid;
   gap: 22px;
 }
