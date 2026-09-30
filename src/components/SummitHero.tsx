@@ -276,13 +276,20 @@ export function SummitHero({ label, className }: { label: string; className?: st
     let last = performance.now();
     let elapsed = 0;
     let visible = true;
+    // Hold the scene at its first frame while the opening film plays.
+    let held = document.documentElement.getAttribute("data-intro") === "playing";
+    const release = () => {
+      held = false;
+      last = performance.now();
+    };
+    window.addEventListener("pf:intro-done", release);
     const io = new IntersectionObserver(([e]) => (visible = e.isIntersecting));
     if (svgRef.current) io.observe(svgRef.current);
 
     const tick = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      if (visible && !document.hidden) {
+      if (visible && !held && !document.hidden) {
         elapsed += dt;
         render(elapsed);
       }
@@ -293,6 +300,7 @@ export function SummitHero({ label, className }: { label: string; className?: st
     return () => {
       cancelAnimationFrame(raf);
       io.disconnect();
+      window.removeEventListener("pf:intro-done", release);
     };
   }, []);
 

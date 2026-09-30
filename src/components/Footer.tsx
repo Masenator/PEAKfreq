@@ -41,6 +41,7 @@ export function Footer() {
               <li><Link href="/science">Evidence library</Link></li>
               <li><Link href="/journal">Journal</Link></li>
               <li><Link href="/about">Our standard</Link></li>
+              <li><a href="/?intro=1">Brand film</a></li>
             </ul>
           </div>
           <div>

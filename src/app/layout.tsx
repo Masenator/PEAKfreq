@@ -3,6 +3,7 @@ import { Archivo, Inter, JetBrains_Mono } from "next/font/google";
 import { CartDrawer } from "@/components/CartDrawer";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { INTRO_BOOT, IntroFilm } from "@/components/IntroFilm";
 import { StoreProvider } from "@/components/StoreProvider";
 import { brand } from "@/data/brand";
 import { formatMoney } from "@/lib/pricing";
@@ -50,7 +51,10 @@ const ANNOUNCEMENTS = [
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${archivo.variable} ${inter.variable} ${mono.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${inter.variable} ${mono.variable}`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT }} />
+      </head>
       <body>
         <StoreProvider>
           <a href="#main" className="skip">
@@ -67,6 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <main id="main">{children}</main>
           <Footer />
           <CartDrawer />
+          <IntroFilm />
         </StoreProvider>
       </body>
     </html>
