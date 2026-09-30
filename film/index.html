@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>PEAKfreq — Brand film</title>
+<style>
+  @font-face { font-family: "Archivo"; src: url(fonts/archivo.woff2) format("woff2"); font-weight: 100 900; font-stretch: 62% 125%; }
+  @font-face { font-family: "Inter"; src: url(fonts/inter.woff2) format("woff2"); font-weight: 100 900; }
+  @font-face { font-family: "JetBrains Mono"; src: url(fonts/mono.woff2) format("woff2"); font-weight: 100 800; }
+  :root { --font-display: "Archivo"; --font-body: "Inter"; --font-mono: "JetBrains Mono"; }
+  html, body { margin: 0; background: #000; }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #0b120e; }
+  #svg, #fx, #grain { position: absolute; inset: 0; display: block; }
+  #grain { mix-blend-mode: overlay; }
+  text { font-kerning: normal; }
+</style>
+</head>
+<body>
+  <div id="stage">
+    <svg id="svg" width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg"></svg>
+    <canvas id="fx" width="1920" height="1080"></canvas>
+    <canvas id="grain" width="1920" height="1080"></canvas>
+  </div>
+  <script src="reel.js"></script>
+</body>
+</html>
