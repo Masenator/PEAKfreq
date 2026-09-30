@@ -11,3 +11,5 @@ exports/
 
 # Brand film render output
 film/out/
+__pycache__/
+*.pyc
